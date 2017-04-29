@@ -94,10 +94,10 @@ Player.prototype.update = function() {
         this.x = 400;
         }
     // Set y coordinate
-    if (this.y >= 606 - this.row) {
+    if (this.y >= 440) {
         this.y = 420;
     }
-    if (this.y <= 0) {
+    if (this.y <= -10) {
         // Set player back to beginning coordinate
         this.x = 200;
         this.y = 420;
@@ -114,13 +114,13 @@ Player.prototype.handleInput = function(direction) {
             this.x -= this.speed + 50;
             break;
         case 'up' :
-            this.y -= this.speed + 50;
+            this.y -= this.speed + 35;
             break;
         case 'right' :
             this.x += this.speed + 50;
             break;
         case 'down' :
-            this.y += this.speed +50;
+            this.y += this.speed +35;
             break;
     }
 }
