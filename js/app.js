@@ -8,7 +8,7 @@ var Enemy = function(x,y,speed) {
     this.x = x;
     this.y = y;
     // Create variable for the enemy speed
-    this.speed = enemySpeed;
+    //this.speed = enemySpeed;
 
     // Create variable for the value of col (engine.js)
     // Using a variable and defining it
@@ -31,7 +31,7 @@ Enemy.prototype.update = function(dt) {
 
     /* HS */    
     // Determine whether the enemy is inside or outside of the canvas
-    if(this.x <= 505 + this.width){
+    if(this.x <= ctx.canvas.width + this.width){
         this.x += this.speed * dt;
         } else {
             // Reset the x coordinate to start again
@@ -85,7 +85,7 @@ Player.prototype.update = function() {
     if (this.x <= 0) {
         this.x = 0;
     } 
-    if (this.x >= 505 - this.width) {
+    if (this.x >= ctx.canvas.width - this.width) {
         this.x = 400;
         }
     // Set y coordinate
@@ -131,10 +131,10 @@ var allEnemies = [];
 // Set y coordinate for each enemy incrementally based on row value
 // Set speed to a base of 100 and add random number
 for(var i = 0; i < 3; i++) {
-    var enemyX = Math.floor(Math.random() * 30);
-    var enemyY = 65 + 83 * i;
-    var enemySpeed = 200 + Math.floor(Math.random() * 400);
-    allEnemies.push(new Enemy(enemyX, enemyY, enemySpeed));
+    var x = Math.floor(Math.random() * 30);
+    var y = 65 + 83 * i;
+    var speed = 200 + Math.floor(Math.random() * 400);
+    allEnemies.push(new Enemy(x, y, speed));
 }
 
 var player = new Player(200, 420, 50);
