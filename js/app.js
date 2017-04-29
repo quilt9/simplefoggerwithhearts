@@ -40,20 +40,13 @@ Enemy.prototype.update = function(dt) {
             this.speed = this.enemySpeed();
         }
 
-    // Check collisions
-    var checkCollisions = function(player) {
+    if (player.x < this.x + 60 &&
+        player.x + 37 > this.x &&
+        player.y < this.y + 25 &&
+        30 + player.y > this.y) {
 
-        enemies.forEach(function(enemy){
-
-            if (player.x < this.x + 60 &&
-                player.x + 37 > this.x &&
-                player.y < this.y + 25 &&
-                30 + player.y > this.y) {
-
-                player.x = 200;
-                player.y = 420;
-            }
-        });
+        player.x = 200;
+        player.y = 420;
     }
 };
 
@@ -64,9 +57,11 @@ Enemy.prototype.render = function() {
 
 /* HS */
 // Give each enemy a random speed
+
 Enemy.prototype.enemySpeed = function() {
-    return Math.floor(Math.random() * 400);
+    return (200 + Math.floor(Math.random() * 400));
 };
+
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -97,7 +92,7 @@ Player.prototype.update = function() {
     if (this.y >= 440) {
         this.y = 420;
     }
-    if (this.y <= -10) {
+    if (this.y <= 0) {
         // Set player back to beginning coordinate
         this.x = 200;
         this.y = 420;
@@ -120,7 +115,7 @@ Player.prototype.handleInput = function(direction) {
             this.x += this.speed + 50;
             break;
         case 'down' :
-            this.y += this.speed +35;
+            this.y += this.speed + 35;
             break;
     }
 }
@@ -138,7 +133,7 @@ var allEnemies = [];
 for(var i = 0; i < 3; i++) {
     var enemyX = Math.floor(Math.random() * 30);
     var enemyY = 65 + 83 * i;
-    var enemySpeed = 100 + Math.floor(Math.random() * 500);
+    var enemySpeed = 200 + Math.floor(Math.random() * 400);
     allEnemies.push(new Enemy(enemyX, enemyY, enemySpeed));
 }
 
