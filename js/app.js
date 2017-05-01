@@ -1,27 +1,41 @@
-// Enemies our player must avoid
-var Enemy = function(x,y,speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+/* HS */
 
-    /* HS */
+// Return a random speed
+function enemySpeed() {
+    return (200 + Math.floor(Math.random() * 400));
+};
+
+// Create Parent/Super class - Entity
+// Enemy and Player objects will inherit some of its 
+// properties and methods
+var Entity = function(x,y,img) {
     // Setup the coordinates
     this.x = x;
     this.y = y;
-    // Create variable for the enemy speed
-    //this.speed = enemySpeed;
-
-    // Create variable for the value of col (engine.js)
-    // Using a variable and defining it
-    // Help to understand the logic in constructing the functions
-    // Allow easier time to make changes to the game
     this.width = 101;
     this.height = 83;
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = img;
+    this.speed = 50;
 };
 
+Entity.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Enemies our player must avoid
+/* HS */
+// Create subclass Enemy
+var Enemy = function(x,y) {
+    // Variables applied to each of our instances go here,
+    // we've provided one for you to get started
+ 
+    Entity.call(this,x,y,'images/enemy-bug.png');
+    this.speed = enemySpeed();
+};
+// Inherit all of the properties and methods of Entity
+Enemy.prototype = Object.create(Entity.prototype);
+// Set the Enemey prototype constructor
+Enemy.prototype.constructor = Enemy;
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -37,9 +51,9 @@ Enemy.prototype.update = function(dt) {
             // Reset the x coordinate to start again
             this.x = -100;
             // Create a random speed 
-            this.speed = this.enemySpeed();
+            this.speed = enemySpeed();
         }
-
+    // Check collision
     if (player.x < this.x + 60 &&
         player.x + 37 > this.x &&
         player.y < this.y + 25 &&
@@ -50,18 +64,6 @@ Enemy.prototype.update = function(dt) {
     }
 };
 
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-/* HS */
-// Give each enemy a random speed
-
-Enemy.prototype.enemySpeed = function() {
-    return (200 + Math.floor(Math.random() * 400));
-};
-
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -69,18 +71,13 @@ Enemy.prototype.enemySpeed = function() {
 
 /* HS */
 // Create Player prototype 
-var Player = function(x,y,speed) {
-    // Same Enemy properties 
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
-    this.width = 101;
-    this.height = 83;
-
-    this.sprite = 'images/char-horn-girl.png';
+var Player = function(x,y) {
+    Entity.call(this,x,y,'images/char-horn-girl.png');
 };
 
-Player.prototype.update = function() {
+Player.prototype = Object.create(Entity.prototype);
+Player.prototype.constructor = Player;
+Player.prototype.update = function(x,y) {
     // Set x coordinate
     if (this.x <= 0) {
         this.x = 0;
@@ -97,10 +94,6 @@ Player.prototype.update = function() {
         this.x = 200;
         this.y = 420;
     }    
-};
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 Player.prototype.handleInput = function(direction) {
@@ -137,7 +130,7 @@ for(var i = 0; i < 3; i++) {
     allEnemies.push(new Enemy(x, y, speed));
 }
 
-var player = new Player(200, 420, 50);
+var player = new Player(200, 420);
 
 
 // This listens for key presses and sends the keys to your

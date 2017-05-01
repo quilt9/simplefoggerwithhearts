@@ -14,3 +14,5 @@ https://www.w3schools.com/js/js_object_prototypes.asp
 http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
 
 http://jlongster.com/Making-Sprite-based-Games-with-Canvas
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain
