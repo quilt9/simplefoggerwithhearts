@@ -46,6 +46,7 @@ function enemySpeed() {
     return (speedMin + Math.floor(Math.random() * speedMax));
 };
 
+/*
 // Returns true if compared actors intersect
 function intersect(entity1, entity2) {
         return !(entity1.right < entity2.left ||
@@ -53,6 +54,7 @@ function intersect(entity1, entity2) {
                 entity1.top > entity2.bottom ||
                 entity1.bottom < entity2.top);
 }
+*/
 
 // Add lives and check player status
 function playerUpdateStatus() {
@@ -180,21 +182,37 @@ Player.prototype.renderStatus = function() {
     ctx.fillText(this.lives + " LIVES", ctx.canvas.width/2, 35);
 };
 
-
 // Check collisions
-Player.prototype.checkCollisions = function(allEnemies, heart) {
-    
-    var self = this;
+Player.prototype.checkCollisions = function(allEnemies,heart) {
 
+    // Check collisions with enemies
     allEnemies.forEach(function(enemy) {
-        if(intersect(enemy, this)){
-           this.alive = false;
+        if (player.x < enemy.x + 60 &&
+            player.x + 37 > enemy.x &&
+            player.y < enemy.y + 25 &&
+            player.y + 30 > enemy.y) {
+            // Delete 1 live
+            player.lives -= 1;
+            // Reset player
+            // Update player sprite if needed, based on lives remaining
+            playerUpdateStatus();
         }
     });
-    
-    if(intersect(heart, this)) {
-        heart.taken = true;
-        this.lives = this.lives + 1;
+
+    // Check collisions with heart
+    if (player.x < heart.x + 60 &&
+        player.x + 37 > heart.x &&
+        player.y < heart.y + 25 &&
+        player.y + 30 > heart.y) {
+
+            // Add 1 live
+            player.lives += 1;
+            // Reset heart
+            heart.taken = true;
+            heart.update();
+            // Reset player
+            // Update player sprite if needed, based on lives remaining
+            playerUpdateStatus();
     }
 };
 
