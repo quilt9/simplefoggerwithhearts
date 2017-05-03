@@ -79,7 +79,7 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
-        //player.checkCollisions();
+        player.checkCollisions(allEnemies,heart);
         updateEntities(dt);
     }
 

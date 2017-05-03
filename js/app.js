@@ -128,7 +128,7 @@ Enemy.prototype.update = function(dt) {
         // Create a random speed 
         this.speed = enemySpeed();
         }
-        this.x += this.speed * dt;     
+        this.x += this.speed * dt;  
 };
 
 
@@ -180,7 +180,7 @@ Player.prototype.renderStatus = function() {
     ctx.fillText(this.lives + " LIVES", ctx.canvas.width/2, 35);
 };
 
-/*
+
 // Check collisions
 Player.prototype.checkCollisions = function(allEnemies, heart) {
     
@@ -197,7 +197,7 @@ Player.prototype.checkCollisions = function(allEnemies, heart) {
         this.lives = this.lives + 1;
     }
 };
-*/
+
 
 /* HS */
 // Add Heart to game for player to capture to gain live
