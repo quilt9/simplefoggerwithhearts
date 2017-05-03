@@ -4,12 +4,12 @@
 */
 
 // Game surface variables
-var gameRow = 83 /* row value */
 var gameCol = 101; /* col value */
+var gameRow = 83 /* row value */
 var gameTopMargin = 50; /* top empty space */
 var gameBottomMargin = 20; /* bottom empty space */
-var gameHeight = gameRow * 6; /* col height multiply number of rows */
-var gameWidth = gameCol * 5; /* col width multiply number of columns */
+var gameWidth = gameCol * 5; /* col width multiply number of columns - 505 */
+var gameHeight = gameRow * 6; /* col height multiply number of rows - 498 */
 var charWidth = 52; /* player width */
 var charHeight = 45; /* player height */
 
@@ -22,8 +22,8 @@ var playerX = gameCol;
 var playerY = gameRow;
 
 // Player reset position
-var resetX = gameCol * 2;
-var resetY = gameHeight-gameRow;
+var resetX = gameCol * 2; /* 202 */
+var resetY = gameHeight-gameRow; /* 415 */
 
 // Player sprite variables
 var boy_3 = 'images/char-boy.png';
@@ -83,10 +83,7 @@ var Entity = function(x,y,img) {
     // Setup the coordinates
     this.x = x;
     this.y = y;
-    this.width = 101;
-    //this.height = 83;
     this.sprite = img;
-    //this.speed = 50;
 };
 
 Entity.prototype.render = function() {
@@ -99,7 +96,6 @@ Entity.prototype.render = function() {
 var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
- 
     Entity.call(this,x,y,'images/enemy-bug.png');
     this.speed = enemySpeed();
 };
@@ -123,38 +119,7 @@ Enemy.prototype.update = function(dt) {
         // Create a random speed 
         this.speed = enemySpeed();
         }
-        this.x += this.speed * dt;
-
-    // Check collision
-    if (player.x < this.x + 60 &&
-        player.x + 37 > this.x &&
-        player.y < this.y + 25 &&
-        30 + player.y > this.y) {
-
-/*
-        if(player.lives >= 2) {
-            
-        player.lives -= 1;
-
-        playerUpdateStatus();
-
-/*
-        if(player.lives > 0 && player.lives <= 3) {
-            player.sprite = boy_3;
-        } else if (player.lives > 3 && player.lives <= 6) {
-            player.sprite = cat_girl_6;
-        } else if (player.lives > 6 && player.lives <= 9) {
-            player.sprite = horn_girl_9;
-        } else if (player.lives > 9 && player.lives <= 12) {
-            player.sprite = pink_girl_12;
-        } else if (player.lives > 12) {
-            player.sprite = princess_girl_15;
-        }
-*/
-        player.x = resetX;
-        player.y = resetY;
-        }
-        
+        this.x += this.speed * dt;     
 };
 
 
@@ -284,7 +249,7 @@ var allEnemies = [];
 for(var i = 0; i < 3; i++) {
     var x = Math.floor(Math.random() * 30);
     var y = gameRow * getRandomInt(0,3) + 65;
-    var speed = 200 + Math.floor(Math.random() * 400);
+    var speed = enemySpeed();
     allEnemies.push(new Enemy(x, y, speed));
 }
 
