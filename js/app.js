@@ -1,9 +1,56 @@
-/* HS */
+/* HS
+ * Collide with Heart = +1 live 
+ * Collide with Bug = -1 live 
+*/
+
+// Game surface variables
+var gameRow = 83 /* row value */
+var gameCol = 101; /* col value */
+var gameTopMargin = 50; /* top empty space */
+var gameBottomMargin = 20; /* bottom empty space */
+var gameHeight = gameRow * 6; /* col height multiply number of rows */
+var gameWidth = gameCol * 5; /* col width multiply number of columns */
+var charWidth = 52; /* player width */
+var charHeight = 45; /* player height */
+
+// Speed in pixels per second
+var speedMin = 200;
+var speedMax = 700; 
+
+// Player movement in pixel
+var playerX = gameCol;
+var playerY = gameRow;
+
+// Player reset position
+var resetX = gameCol * 2;
+var resetY = gameHeight-gameRow;
+
+// Player sprite variables
+var boy_3 = 'images/char-boy.png';
+var cat_girl_6 = 'images/char-cat-girl.png';
+var horn_girl_9 = 'images/char-horn-girl.png';
+var pink_girl_12 = 'images/char-pink-girl.png';
+var princess_girl_15 = 'images/char-princess-girl.png';
+
+// Returns a random integer between min (included) and max (excluded)
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 
 // Return a random speed
 function enemySpeed() {
-    return (200 + Math.floor(Math.random() * 400));
+    return (speedMin + Math.floor(Math.random() * speedMax));
 };
+
+// Returns true if compared actors intersect
+function intersect(entity1, entity2) {
+        return !(entity1.right < entity2.left ||
+                entity1.left > entity2.right ||
+                entity1.top > entity2.bottom ||
+                entity1.bottom < entity2.top);
+}
 
 // Create Parent/Super class - Entity
 // Enemy and Player objects will inherit some of its 
@@ -13,9 +60,9 @@ var Entity = function(x,y,img) {
     this.x = x;
     this.y = y;
     this.width = 101;
-    this.height = 83;
+    //this.height = 83;
     this.sprite = img;
-    this.speed = 50;
+    //this.speed = 50;
 };
 
 Entity.prototype.render = function() {
@@ -45,23 +92,41 @@ Enemy.prototype.update = function(dt) {
 
     /* HS */    
     // Determine whether the enemy is inside or outside of the canvas
-    if(this.x <= ctx.canvas.width + this.width){
-        this.x += this.speed * dt;
-        } else {
-            // Reset the x coordinate to start again
-            this.x = -100;
-            // Create a random speed 
-            this.speed = enemySpeed();
+    if(this.x > gameWidth + gameCol){
+        // Reset the x coordinate to start again
+        this.x = 0 - gameCol;
+        this.y = gameRow * getRandomInt(0,3) + 65;
+        // Create a random speed 
+        this.speed = enemySpeed();
         }
+        this.x += this.speed * dt;
+
     // Check collision
     if (player.x < this.x + 60 &&
         player.x + 37 > this.x &&
         player.y < this.y + 25 &&
         30 + player.y > this.y) {
 
-        player.x = 200;
-        player.y = 420;
-    }
+        if(player.lives >= 2) {
+            
+        player.lives -= 1;
+
+        if(player.lives > 0 && player.lives <= 3) {
+            player.sprite = boy_3;
+        } else if (player.lives > 3 && player.lives <= 6) {
+            player.sprite = cat_girl_6;
+        } else if (player.lives > 6 && player.lives <= 9) {
+            player.sprite = horn_girl_9;
+        } else if (player.lives > 9 && player.lives <= 12) {
+            player.sprite = pink_girl_12;
+        } else if (player.lives > 12) {
+            player.sprite = princess_girl_15;
+        }
+        player.x = resetX;
+        player.y = resetY;
+        }
+    };
+
 };
 
 
@@ -72,7 +137,9 @@ Enemy.prototype.update = function(dt) {
 /* HS */
 // Create Player prototype 
 var Player = function(x,y) {
-    Entity.call(this,x,y,'images/char-horn-girl.png');
+    Entity.call(this,x,y,'images/char-boy.png');
+    this.alive = true;
+    this.lives = 3;
 };
 
 Player.prototype = Object.create(Entity.prototype);
@@ -82,36 +149,94 @@ Player.prototype.update = function(x,y) {
     if (this.x <= 0) {
         this.x = 0;
     } 
-    if (this.x >= ctx.canvas.width - this.width) {
-        this.x = 400;
+    if (this.x >= gameWidth - gameCol) {
+        this.x = gameWidth - gameCol;
         }
     // Set y coordinate
-    if (this.y >= 440) {
-        this.y = 420;
+    if (this.y >= resetY) {
+        this.y = resetY;
     }
-    if (this.y <= 0) {
+    if (this.y <= 10) {
         // Set player back to beginning coordinate
-        this.x = 200;
-        this.y = 420;
-    }    
+        this.lives += 1;
+        if(this.lives > 0 && this.lives <= 3) {
+            this.sprite = boy_3;
+        } else if (this.lives > 3 && this.lives <= 6) {
+            this.sprite = cat_girl_6;
+        } else if (this.lives > 6 && this.lives <= 9) {
+            this.sprite = horn_girl_9;
+        } else if (this.lives > 9 && this.lives <= 12) {
+            this.sprite = pink_girl_12;
+        } else if (this.lives > 12) {
+            this.sprite = princess_girl_15;
+        }
+        this.x = resetX;
+        this.y = resetY;
+        
+    }
 };
 
 Player.prototype.handleInput = function(direction) {
     switch (direction) {
         case 'left' :
-            this.x -= this.speed + 50;
+            this.x -= playerX;
             break;
         case 'up' :
-            this.y -= this.speed + 35;
+            this.y -= playerY;
             break;
         case 'right' :
-            this.x += this.speed + 50;
+            this.x += playerX;
             break;
         case 'down' :
-            this.y += this.speed + 35;
+            this.y += playerY;
             break;
     }
 }
+
+Player.prototype.renderStatus = function() {
+    ctx.clearRect(0, 0 , 505 , 40);
+    ctx.font = "20px Arial";
+    ctx.textAlign = 'center';
+    // Draw scores on the top left
+    ctx.fillStyle="#282828";
+    ctx.fillText(this.lives + " LIVES", ctx.canvas.width/2, 35);
+}
+
+/*
+// Check collisions
+Player.prototype.checkCollisions = function(allEnemies, heart) {
+    
+    var self = this;
+    allEnemies.forEach(function(enemy) {
+        if(intersect(enemy, this)){
+           this.alive = false;
+        }
+    });
+    
+    if(intersect(heart, this)) {
+        heart.taken = true;
+        this.lives = this.lives + 1;
+    }
+};
+*/
+
+/* HS */
+// Add Heart to game for player to capture to gain live
+
+var Heart = function(x, y) {
+    Entity.call(this, x, y, 'images/Heart.png');
+    this.taken = false;
+};
+Heart.prototype = Object.create(Entity.prototype);
+Heart.prototype.constructor = Heart;
+Heart.prototype.update = function() {
+    // Heart will reset after it's taken
+    if(this.taken === true) {
+        this.x = gameCol * getRandomInt(0, 5);
+        this.y = gameRow * getRandomInt(0,3)+65;
+        this.taken = false;
+    }
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -125,12 +250,13 @@ var allEnemies = [];
 // Set speed to a base of 100 and add random number
 for(var i = 0; i < 3; i++) {
     var x = Math.floor(Math.random() * 30);
-    var y = 65 + 83 * i;
+    var y = gameRow * getRandomInt(0,3) + 65;
     var speed = 200 + Math.floor(Math.random() * 400);
     allEnemies.push(new Enemy(x, y, speed));
 }
 
-var player = new Player(200, 420);
+var player = new Player(resetX, gameHeight-gameRow);
+var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65);
 
 
 // This listens for key presses and sends the keys to your
