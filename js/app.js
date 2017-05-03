@@ -81,18 +81,18 @@ function playerUpdateStatus() {
 // Create Parent/Super class - Entity
 // Enemy and Player objects will inherit some of its 
 // properties and methods
-var Entity = function(x,y,img,rightMargin,leftMargin,topMargin,bottomMargin) {
+var Entity = function(x,y,img,rightX,leftX,topY,bottomY) {
     this.x = x;
     this.y = y;
     this.sprite = img;
-    this.rightMargin = rightMargin;
-    this.leftMargin = leftMargin;
-    this.topMargin = topMargin;
-    this.bottomMargin = bottomMargin;
-    this.right = this.x + this.rightMargin;
-    this.left = this.x + this.leftMargin;
-    this.top = this.top + this.topMargin;
-    this.bottom = this.bottom + this.bottomMargin;
+    this.rightX = rightX;
+    this.leftX = leftX;
+    this.topY = topY;
+    this.bottomY = bottomY;
+    this.right = this.x + this.rightX;
+    this.left = this.x + this.leftX;
+    this.top = this.top + this.topY;
+    this.bottom = this.bottom + this.bottomY;
 };
 
 Entity.prototype.render = function() {
@@ -102,10 +102,10 @@ Entity.prototype.render = function() {
 // Enemies our player must avoid
 /* HS */
 // Create subclass Enemy
-var Enemy = function(x,y,rightMargin,leftMargin,topMargin,bottomMargin) {
+var Enemy = function(x,y,rightX,leftX,topY,bottomY) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    Entity.call(this,x,y,'images/enemy-bug.png',rightMargin,leftMargin,topMargin,bottomMargin);
+    Entity.call(this,x,y,'images/enemy-bug.png',rightX,leftX,topY,bottomY);
     this.speed = enemySpeed();
 };
 // Inherit all of the properties and methods of Entity
@@ -138,8 +138,8 @@ Enemy.prototype.update = function(dt) {
 
 /* HS */
 // Create Player prototype 
-var Player = function(x,y,rightMargin,leftMargin,topMargin,bottomMargin) {
-    Entity.call(this,x,y,'images/char-boy.png',rightMargin,leftMargin,topMargin,bottomMargin);
+var Player = function(x,y,rightX,leftX,topY,bottomY) {
+    Entity.call(this,x,y,'images/char-boy.png',rightX,leftX,topY,bottomY);
     this.alive = true;
     this.lives = 3;
 };
@@ -158,39 +158,9 @@ Player.prototype.handleInput = function(keyCode) {
     } else if(keyCode === "down" && this.y < gameHeight - gameRow) {
         this.y += gameRow;
     }
-
-    /*
-    switch (direction) {
-        case 'left' :
-            this.x -= gameCol;
-            break;
-        case 'up' :
-            this.y -= gameRow;
-            break;
-        case 'right' :
-            this.x += gameCol;
-            break;
-        case 'down' :
-            this.y += gameRow;
-            break;
-    }
-    */
 };
 
 Player.prototype.update = function(x,y) {
-    // Set x coordinate
-    /*
-    if (this.x <= 0) {
-        this.x = 0;
-    } 
-    if (this.x >= gameWidth - gameCol) {
-        this.x = gameWidth - gameCol;
-        }
-    // Set y coordinate
-    if (this.y >= resetY) {
-        this.y = resetY;
-    }
-    */
     // Check to see if player reaches the water
     if (this.y <= 10) {
         // Add 1 live
@@ -215,6 +185,7 @@ Player.prototype.renderStatus = function() {
 Player.prototype.checkCollisions = function(allEnemies, heart) {
     
     var self = this;
+
     allEnemies.forEach(function(enemy) {
         if(intersect(enemy, this)){
            this.alive = false;
@@ -231,8 +202,8 @@ Player.prototype.checkCollisions = function(allEnemies, heart) {
 /* HS */
 // Add Heart to game for player to capture to gain live
 
-var Heart = function(x, y) {
-    Entity.call(this, x, y, 'images/Heart.png');
+var Heart = function(x, y, rightX,leftX,topY,bottomY) {
+    Entity.call(this, x, y, 'images/Heart.png',rightX,leftX,topY,bottomY);
     this.taken = false;
 };
 Heart.prototype = Object.create(Entity.prototype);
@@ -259,12 +230,11 @@ var allEnemies = [];
 for(var i = 0; i < 3; i++) {
     var x = Math.floor(Math.random() * 30);
     var y = gameRow * getRandomInt(0,3) + 65;
-    var speed = enemySpeed();
-    allEnemies.push(new Enemy(x, y, speed));
+    allEnemies.push(new Enemy(x,y,rightMargin,leftMargin,topMargin,bottomMargin));
 }
 
-var player = new Player(resetX, gameHeight-gameRow);
-var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65);
+var player = new Player(resetX, gameHeight-gameRow,rightMargin,leftMargin,topMargin,bottomMargin);
+var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65,rightMargin,leftMargin,topMargin,bottomMargin);
 
 
 // This listens for key presses and sends the keys to your
