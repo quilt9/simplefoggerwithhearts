@@ -107,6 +107,8 @@ Enemy.prototype.update = function(dt) {
         player.y < this.y + 25 &&
         30 + player.y > this.y) {
 
+        /*
+
         if(player.lives >= 2) {
             
         player.lives -= 1;
@@ -122,11 +124,12 @@ Enemy.prototype.update = function(dt) {
         } else if (player.lives > 12) {
             player.sprite = princess_girl_15;
         }
+        
+        */
+
         player.x = resetX;
         player.y = resetY;
         }
-    };
-
 };
 
 
