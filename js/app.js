@@ -46,16 +46,6 @@ function enemySpeed() {
     return (speedMin + Math.floor(Math.random() * speedMax));
 };
 
-/*
-// Returns true if compared actors intersect
-function intersect(entity1, entity2) {
-        return !(entity1.right < entity2.left ||
-                entity1.left > entity2.right ||
-                entity1.top > entity2.bottom ||
-                entity1.bottom < entity2.top);
-}
-*/
-
 // Add lives and check player status
 function playerUpdateStatus() {
     //player.lives += 1;
@@ -83,18 +73,10 @@ function playerUpdateStatus() {
 // Create Parent/Super class - Entity
 // Enemy and Player objects will inherit some of its 
 // properties and methods
-var Entity = function(x,y,img,rightX,leftX,topY,bottomY) {
+var Entity = function(x,y,img) {
     this.x = x;
     this.y = y;
     this.sprite = img;
-    this.rightX = rightX;
-    this.leftX = leftX;
-    this.topY = topY;
-    this.bottomY = bottomY;
-    this.right = this.x + this.rightX;
-    this.left = this.x + this.leftX;
-    this.top = this.top + this.topY;
-    this.bottom = this.bottom + this.bottomY;
 };
 
 Entity.prototype.render = function() {
