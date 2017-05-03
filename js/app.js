@@ -21,6 +21,12 @@ var speedMax = 700;
 var resetX = gameCol * 2; /* 202 */
 var resetY = gameHeight-gameRow; /* 415 */
 
+// Add margins to entities
+var rightMargin = 83,
+    leftMargin = 18,
+    topMargin = 81,
+    bottomMargin = 132;
+
 // Player sprite variables
 var boy_3 = 'images/char-boy.png';
 var cat_girl_6 = 'images/char-cat-girl.png';
@@ -75,11 +81,18 @@ function playerUpdateStatus() {
 // Create Parent/Super class - Entity
 // Enemy and Player objects will inherit some of its 
 // properties and methods
-var Entity = function(x,y,img) {
-    // Setup the coordinates
+var Entity = function(x,y,img,rightMargin,leftMargin,topMargin,bottomMargin) {
     this.x = x;
     this.y = y;
     this.sprite = img;
+    this.rightMargin = rightMargin;
+    this.leftMargin = leftMargin;
+    this.topMargin = topMargin;
+    this.bottomMargin = bottomMargin;
+    this.right = this.x + this.rightMargin;
+    this.left = this.x + this.leftMargin;
+    this.top = this.top + this.topMargin;
+    this.bottom = this.bottom + this.bottomMargin;
 };
 
 Entity.prototype.render = function() {
@@ -89,10 +102,10 @@ Entity.prototype.render = function() {
 // Enemies our player must avoid
 /* HS */
 // Create subclass Enemy
-var Enemy = function(x,y) {
+var Enemy = function(x,y,rightMargin,leftMargin,topMargin,bottomMargin) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    Entity.call(this,x,y,'images/enemy-bug.png');
+    Entity.call(this,x,y,'images/enemy-bug.png',rightMargin,leftMargin,topMargin,bottomMargin);
     this.speed = enemySpeed();
 };
 // Inherit all of the properties and methods of Entity
@@ -125,8 +138,8 @@ Enemy.prototype.update = function(dt) {
 
 /* HS */
 // Create Player prototype 
-var Player = function(x,y) {
-    Entity.call(this,x,y,'images/char-boy.png');
+var Player = function(x,y,rightMargin,leftMargin,topMargin,bottomMargin) {
+    Entity.call(this,x,y,'images/char-boy.png',rightMargin,leftMargin,topMargin,bottomMargin);
     this.alive = true;
     this.lives = 3;
 };
@@ -155,7 +168,19 @@ Player.prototype.update = function(x,y) {
     }
 };
 
-Player.prototype.handleInput = function(direction) {
+Player.prototype.handleInput = function(keyCode) {
+
+    if(keyCode === "left" && this.x > 0 + charWidth) {
+        this.x -= gameCol;
+    } else if(keyCode === "up" && this.y < gameHeight - gameBottomMargin) {
+        this.y -= gameRow;
+    } else if(keyCode === "right" && this.x < gameWidth - charWidth) {
+        this.x += gameCol;
+    } else if(keyCode === "down" && this.y > gameTopMargin) {
+        this.y += gameRow;
+    }
+
+    /*
     switch (direction) {
         case 'left' :
             this.x -= gameCol;
@@ -170,6 +195,7 @@ Player.prototype.handleInput = function(direction) {
             this.y += gameRow;
             break;
     }
+    */
 }
 
 Player.prototype.renderStatus = function() {
@@ -179,7 +205,7 @@ Player.prototype.renderStatus = function() {
     // Draw scores on the top left
     ctx.fillStyle="#282828";
     ctx.fillText(this.lives + " LIVES", ctx.canvas.width/2, 35);
-}
+};
 
 /*
 // Check collisions
