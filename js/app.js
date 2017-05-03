@@ -157,11 +157,22 @@ Player.prototype.update = function(x,y) {
 
 Player.prototype.renderStatus = function() {
     ctx.clearRect(0, 0 , 505 , 40);
-    ctx.font = "20px Arial";
+    ctx.font = "36px Arial";
     ctx.textAlign = 'center';
     // Draw scores on the top left
     ctx.fillStyle="#282828";
     ctx.fillText(this.lives + " LIVES", ctx.canvas.width/2, 35);
+    ctx.clearRect(0, 590, 505, 620);
+    ctx.font = "16px Arial";
+    ctx.textAlign = 'left';
+    // Draw scores on the top left
+    ctx.fillStyle="#282828";
+    ctx.fillText("Get a Heart + 1 Live", 0, 625);
+    ctx.textAlign = 'center';
+    ctx.fillText("Wet Your Toe + 1 Live", gameWidth/2, 625);
+    ctx.textAlign = 'right';
+    ctx.fillText("Get Bugged - 1 Live", gameWidth, 625);
+
 };
 
 // Check collisions
