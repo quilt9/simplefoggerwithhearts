@@ -146,37 +146,16 @@ var Player = function(x,y,rightMargin,leftMargin,topMargin,bottomMargin) {
 
 Player.prototype = Object.create(Entity.prototype);
 Player.prototype.constructor = Player;
-Player.prototype.update = function(x,y) {
-    // Set x coordinate
-    if (this.x <= 0) {
-        this.x = 0;
-    } 
-    if (this.x >= gameWidth - gameCol) {
-        this.x = gameWidth - gameCol;
-        }
-    // Set y coordinate
-    if (this.y >= resetY) {
-        this.y = resetY;
-    }
-    // Check to see if player reaches the water
-    if (this.y <= 10) {
-        // Add 1 live
-        this.lives += 1;
-        // Reset player
-        // Update player sprite if needed, based on lives remaining
-        playerUpdateStatus();
-    }
-};
 
 Player.prototype.handleInput = function(keyCode) {
 
     if(keyCode === "left" && this.x > 0 + charWidth) {
         this.x -= gameCol;
-    } else if(keyCode === "up" && this.y < gameHeight - gameBottomMargin) {
+    } else if(keyCode === "up" && this.y > gameTopMargin) {
         this.y -= gameRow;
-    } else if(keyCode === "right" && this.x < gameWidth - charWidth) {
+    } else if(keyCode === "right" && this.x < gameWidth - gameCol) {
         this.x += gameCol;
-    } else if(keyCode === "down" && this.y > gameTopMargin) {
+    } else if(keyCode === "down" && this.y < gameHeight - gameRow) {
         this.y += gameRow;
     }
 
@@ -196,7 +175,31 @@ Player.prototype.handleInput = function(keyCode) {
             break;
     }
     */
-}
+};
+
+Player.prototype.update = function(x,y) {
+    // Set x coordinate
+    /*
+    if (this.x <= 0) {
+        this.x = 0;
+    } 
+    if (this.x >= gameWidth - gameCol) {
+        this.x = gameWidth - gameCol;
+        }
+    // Set y coordinate
+    if (this.y >= resetY) {
+        this.y = resetY;
+    }
+    */
+    // Check to see if player reaches the water
+    if (this.y <= 10) {
+        // Add 1 live
+        this.lives += 1;
+        // Reset player
+        // Update player sprite if needed, based on lives remaining
+        playerUpdateStatus();
+    }
+};
 
 Player.prototype.renderStatus = function() {
     ctx.clearRect(0, 0 , 505 , 40);
