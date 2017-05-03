@@ -17,10 +17,6 @@ var charHeight = 45; /* player height */
 var speedMin = 200;
 var speedMax = 700; 
 
-// Player movement in pixel
-var playerX = gameCol;
-var playerY = gameRow;
-
 // Player reset position
 var resetX = gameCol * 2; /* 202 */
 var resetY = gameHeight-gameRow; /* 415 */
@@ -153,23 +149,8 @@ Player.prototype.update = function(x,y) {
     if (this.y <= 10) {
         // Add 1 live
         this.lives += 1;
-        /*
-        // Check number of lives remaining
-        if(this.lives > 0 && this.lives <= 3) {
-            this.sprite = boy_3;
-        } else if (this.lives > 3 && this.lives <= 6) {
-            this.sprite = cat_girl_6;
-        } else if (this.lives > 6 && this.lives <= 9) {
-            this.sprite = horn_girl_9;
-        } else if (this.lives > 9 && this.lives <= 12) {
-            this.sprite = pink_girl_12;
-        } else if (this.lives > 12) {
-            this.sprite = princess_girl_15;
-        }
-        // Set player back to beginning coordinates
-        this.x = resetX;
-        this.y = resetY;
-        */
+        // Reset player
+        // Update player sprite if needed, based on lives remaining
         playerUpdateStatus();
     }
 };
@@ -177,16 +158,16 @@ Player.prototype.update = function(x,y) {
 Player.prototype.handleInput = function(direction) {
     switch (direction) {
         case 'left' :
-            this.x -= playerX;
+            this.x -= gameCol;
             break;
         case 'up' :
-            this.y -= playerY;
+            this.y -= gameRow;
             break;
         case 'right' :
-            this.x += playerX;
+            this.x += gameCol;
             break;
         case 'down' :
-            this.y += playerY;
+            this.y += gameRow;
             break;
     }
 }
