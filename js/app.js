@@ -52,6 +52,30 @@ function intersect(entity1, entity2) {
                 entity1.bottom < entity2.top);
 }
 
+// Add lives and check player status
+function playerUpdateStatus() {
+    //player.lives += 1;
+        // Check number of lives remaining
+        if(player.lives > 0 && player.lives <= 3) {
+            player.sprite = boy_3;
+        } else if (player.lives > 3 && player.lives <= 6) {
+            player.sprite = cat_girl_6;
+        } else if (player.lives > 6 && player.lives <= 9) {
+            player.sprite = horn_girl_9;
+        } else if (player.lives > 9 && player.lives <= 12) {
+            player.sprite = pink_girl_12;
+        } else if (player.lives > 12) {
+            player.sprite = princess_girl_15;
+        }
+        // Set player back to beginning coordinates
+        player.x = resetX;
+        player.y = resetY;
+}
+
+/*
+============================================================================
+*/
+
 // Create Parent/Super class - Entity
 // Enemy and Player objects will inherit some of its 
 // properties and methods
@@ -107,12 +131,14 @@ Enemy.prototype.update = function(dt) {
         player.y < this.y + 25 &&
         30 + player.y > this.y) {
 
-        /*
-
+/*
         if(player.lives >= 2) {
             
         player.lives -= 1;
 
+        playerUpdateStatus();
+
+/*
         if(player.lives > 0 && player.lives <= 3) {
             player.sprite = boy_3;
         } else if (player.lives > 3 && player.lives <= 6) {
@@ -124,12 +150,11 @@ Enemy.prototype.update = function(dt) {
         } else if (player.lives > 12) {
             player.sprite = princess_girl_15;
         }
-        
-        */
-
+*/
         player.x = resetX;
         player.y = resetY;
         }
+        
 };
 
 
@@ -159,9 +184,12 @@ Player.prototype.update = function(x,y) {
     if (this.y >= resetY) {
         this.y = resetY;
     }
+    // Check to see if player reaches the water
     if (this.y <= 10) {
-        // Set player back to beginning coordinate
+        // Add 1 live
         this.lives += 1;
+        /*
+        // Check number of lives remaining
         if(this.lives > 0 && this.lives <= 3) {
             this.sprite = boy_3;
         } else if (this.lives > 3 && this.lives <= 6) {
@@ -173,9 +201,11 @@ Player.prototype.update = function(x,y) {
         } else if (this.lives > 12) {
             this.sprite = princess_girl_15;
         }
+        // Set player back to beginning coordinates
         this.x = resetX;
         this.y = resetY;
-        
+        */
+        playerUpdateStatus();
     }
 };
 
