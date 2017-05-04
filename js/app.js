@@ -3,6 +3,9 @@
  * Collide with Bug = -1 live 
 */
 
+// Game state
+var isGameOver;
+
 // Game surface variables
 var gameCol = 101; /* col value */
 var gameRow = 83 /* row value */
@@ -69,12 +72,10 @@ function playerUpdateStatus() {
 
 // Game over
 function gameOver() {
-    player.lives -= 1;
     document.getElementById('game-over').style.display = 'block';
     document.getElementById('game-over-overlay').style.display = 'block';
     player.alive = false;
-    player.sprite = "";
-    isGameOver = true;
+    //isGameOver = true;
 }
 
 /*
@@ -164,6 +165,21 @@ Player.prototype.update = function(x,y) {
         // Update player sprite if needed, based on lives remaining
         playerUpdateStatus();
     }
+
+    // Checks to see if player is alive and reset position
+    if(this.alive === false) {
+        this.x = resetX;
+        this.y = resetY;
+        this.sprite = boy_3;
+        this.alive = true;
+        if(this.lives === 0){
+            this.lives = 3;
+        } else {
+            this.lives = this.lives - 1;
+            playerUpdateStatus();
+        }
+    }
+
 };
 
 Player.prototype.renderStatus = function() {
@@ -195,11 +211,8 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
             player.x + 37 > enemy.x &&
             player.y < enemy.y + 25 &&
             player.y + 30 > enemy.y) {
-            // Delete 1 live
-            player.lives -= 1;
-            // Reset player
-            // Update player sprite if needed, based on lives remaining
-            playerUpdateStatus();
+            // Player loses
+            player.alive = false;
         }
     });
 

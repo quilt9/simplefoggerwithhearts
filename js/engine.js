@@ -66,8 +66,6 @@ var Engine = (function(global) {
     function init() {
 
         document.getElementById('play-again').addEventListener('click', function() {
-            document.getElementById('game-over').style.display = 'none';
-            document.getElementById('game-over-overlay').style.display = 'none';
             reset();
         });
 
@@ -171,6 +169,14 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
+        document.getElementById('game-over').style.display = 'none';
+        document.getElementById('game-over-overlay').style.display = 'none';
+        
+        renderEntities();
+    }
+
+    function gameReset() {
+        
     }
 
     /* Go ahead and load all of the images we know we're going to need to
