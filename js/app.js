@@ -88,9 +88,7 @@ function gameOver() {
     document.getElementById('game-over').style.display = 'block';
     document.getElementById('game-over-overlay').style.display = 'block';
     alert("Game Over");
-
-    //player.alive = false;
-    //isGameOver = true;
+    player.alive = true;
     gameReset();
 }
 
@@ -99,23 +97,13 @@ function gameReset() {
     document.getElementById('play-again').addEventListener('click', function() {
         document.getElementById('game-over').style.display = 'none';
         document.getElementById('game-over-overlay').style.display = 'none';
-        player.lives = 3;
-/*
-        var allEnemies = [];
-        // For each enemy
-        // Set x coordinate randomly
-        // Set y coordinate for each enemy incrementally based on row value
-        // Set speed to a base of 100 and add random number
-        for(var i = 0; i < 3; i++) {
-            var x = Math.floor(Math.random() * 30);
-            var y = gameRow * getRandomInt(0,3) + 65;
-            allEnemies.push(new Enemy(x,y));
+        if (player.alive ===  true) {
+            player.x = resetX;
+            player.y = resetY;
+            //player.sprite = boy_3;
+            player.alive = true;
+            player.lives = 3;
         }
-
-        var player = new Player(resetX, resetY);
-        var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65);
-
-*/
     });
 
 }
@@ -210,11 +198,11 @@ Player.prototype.update = function(x,y) {
 
     // Checks to see if player is alive and reset position
     if(this.alive === false) {
-        alert("2");        
-        this.x = resetX;
-        this.y = resetY;
-        //allEnemies = [];
-        this.alive = true;
+        alert("2"); 
+        this.x = -9999;
+        //this.y = -9999;
+        //this.alive = true;
+        this.lives = 0;
         gameOver();        
     }
     
@@ -252,11 +240,10 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
             player.y + 30 > enemy.y) {
             // Player loses
             player.lives -= 1;
-            alert ("1");
             if (player.lives === 0) {
-                alert("0 lives");
                 //player.sprite = "";
                 //heart.sprite = "";
+                //allEnemies = [];
                 player.alive = false;
             } else {
                 playerUpdateStatus();
