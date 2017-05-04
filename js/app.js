@@ -24,12 +24,6 @@ var speedMax = 700;
 var resetX = gameCol * 2; /* 202 */
 var resetY = gameHeight-gameRow; /* 415 */
 
-// Add margins to entities
-var rightMargin = 83,
-    leftMargin = 18,
-    topMargin = 81,
-    bottomMargin = 132;
-
 // Player sprite variables
 var boy_3 = 'images/char-boy.png';
 var cat_girl_6 = 'images/char-cat-girl.png';
@@ -49,7 +43,7 @@ function enemySpeed() {
     return (speedMin + Math.floor(Math.random() * speedMax));
 };
 
-// Add lives and check player status
+// Update lives and player sprite after enemy collision and getting to the water
 function playerUpdateStatus() {
         // Check number of lives remaining
         if(player.lives === 0) {
@@ -68,6 +62,27 @@ function playerUpdateStatus() {
         // Set player back to beginning coordinates
         player.x = resetX;
         player.y = resetY;
+}
+
+// Update lives and player status after heart collection
+function heartUpdateStatus() {
+        // Check number of lives remaining
+        if(player.lives === 0) {
+            gameOver();
+        } else if(player.lives > 0 && player.lives <= 3) {
+            player.sprite = boy_3;
+        } else if (player.lives > 3 && player.lives <= 6) {
+            player.sprite = cat_girl_6;
+        } else if (player.lives > 6 && player.lives <= 9) {
+            player.sprite = horn_girl_9;
+        } else if (player.lives > 9 && player.lives <= 12) {
+            player.sprite = pink_girl_12;
+        } else if (player.lives > 12) {
+            player.sprite = princess_girl_15;
+        }
+        // Set player back to beginning coordinates
+        //player.x = resetX;
+        //player.y = resetY;
 }
 
 // Game over
@@ -98,10 +113,10 @@ Entity.prototype.render = function() {
 // Enemies our player must avoid
 /* HS */
 // Create subclass Enemy
-var Enemy = function(x,y,rightX,leftX,topY,bottomY) {
+var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    Entity.call(this,x,y,'images/enemy-bug.png',rightX,leftX,topY,bottomY);
+    Entity.call(this,x,y,'images/enemy-bug.png');
     this.speed = enemySpeed();
 };
 // Inherit all of the properties and methods of Entity
@@ -134,8 +149,8 @@ Enemy.prototype.update = function(dt) {
 
 /* HS */
 // Create Player prototype 
-var Player = function(x,y,rightX,leftX,topY,bottomY) {
-    Entity.call(this,x,y,'images/char-boy.png',rightX,leftX,topY,bottomY);
+var Player = function(x,y) {
+    Entity.call(this,x,y,'images/char-boy.png');
     this.alive = true;
     this.lives = 3;
 };
@@ -229,7 +244,7 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
             heart.update();
             // Reset player
             // Update player sprite if needed, based on lives remaining
-            playerUpdateStatus();
+            heartUpdateStatus();
     }
 };
 
@@ -238,7 +253,7 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
 // Add Heart to game for player to capture to gain live
 
 var Heart = function(x, y, rightX,leftX,topY,bottomY) {
-    Entity.call(this, x, y, 'images/Heart.png',rightX,leftX,topY,bottomY);
+    Entity.call(this, x, y, 'images/Heart.png');
     this.taken = false;
 };
 Heart.prototype = Object.create(Entity.prototype);
@@ -265,11 +280,11 @@ var allEnemies = [];
 for(var i = 0; i < 3; i++) {
     var x = Math.floor(Math.random() * 30);
     var y = gameRow * getRandomInt(0,3) + 65;
-    allEnemies.push(new Enemy(x,y,rightMargin,leftMargin,topMargin,bottomMargin));
+    allEnemies.push(new Enemy(x,y));
 }
 
-var player = new Player(resetX, gameHeight-gameRow,rightMargin,leftMargin,topMargin,bottomMargin);
-var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65,rightMargin,leftMargin,topMargin,bottomMargin);
+var player = new Player(resetX, resetY);
+var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65);
 
 
 // This listens for key presses and sends the keys to your
