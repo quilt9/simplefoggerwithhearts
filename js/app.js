@@ -3,9 +3,6 @@
  * Collide with Bug = -1 live 
 */
 
-// Game state
-var isGameOver;
-
 // Game surface variables
 var gameCol = 101; /* col value */
 var gameRow = 83 /* row value */
@@ -47,6 +44,7 @@ function enemySpeed() {
 function playerUpdateStatus() {
         // Check number of lives remaining
         if(player.lives === 0) {
+            alert("3");
             gameOver();
         } else if(player.lives > 0 && player.lives <= 3) {
             player.sprite = boy_3;
@@ -89,8 +87,37 @@ function heartUpdateStatus() {
 function gameOver() {
     document.getElementById('game-over').style.display = 'block';
     document.getElementById('game-over-overlay').style.display = 'block';
-    player.alive = false;
+    alert("Game Over");
+
+    //player.alive = false;
     //isGameOver = true;
+    gameReset();
+}
+
+// Game Reset
+function gameReset() {
+    document.getElementById('play-again').addEventListener('click', function() {
+        document.getElementById('game-over').style.display = 'none';
+        document.getElementById('game-over-overlay').style.display = 'none';
+        player.lives = 3;
+/*
+        var allEnemies = [];
+        // For each enemy
+        // Set x coordinate randomly
+        // Set y coordinate for each enemy incrementally based on row value
+        // Set speed to a base of 100 and add random number
+        for(var i = 0; i < 3; i++) {
+            var x = Math.floor(Math.random() * 30);
+            var y = gameRow * getRandomInt(0,3) + 65;
+            allEnemies.push(new Enemy(x,y));
+        }
+
+        var player = new Player(resetX, resetY);
+        var heart = new Heart(gameCol * getRandomInt(0,6), gameRow * getRandomInt(0,3)+65);
+
+*/
+    });
+
 }
 
 /*
@@ -183,17 +210,14 @@ Player.prototype.update = function(x,y) {
 
     // Checks to see if player is alive and reset position
     if(this.alive === false) {
+        alert("2");        
         this.x = resetX;
         this.y = resetY;
-        this.sprite = boy_3;
+        //allEnemies = [];
         this.alive = true;
-        if(this.lives === 0){
-            this.lives = 3;
-        } else {
-            this.lives = this.lives - 1;
-            playerUpdateStatus();
-        }
+        gameOver();        
     }
+    
 
 };
 
@@ -227,7 +251,16 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
             player.y < enemy.y + 25 &&
             player.y + 30 > enemy.y) {
             // Player loses
-            player.alive = false;
+            player.lives -= 1;
+            alert ("1");
+            if (player.lives === 0) {
+                alert("0 lives");
+                //player.sprite = "";
+                //heart.sprite = "";
+                player.alive = false;
+            } else {
+                playerUpdateStatus();
+            }
         }
     });
 
