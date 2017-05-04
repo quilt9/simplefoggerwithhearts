@@ -48,9 +48,10 @@ function enemySpeed() {
 
 // Add lives and check player status
 function playerUpdateStatus() {
-    //player.lives += 1;
         // Check number of lives remaining
-        if(player.lives > 0 && player.lives <= 3) {
+        if(player.lives === 0) {
+            gameOver();
+        } else if(player.lives > 0 && player.lives <= 3) {
             player.sprite = boy_3;
         } else if (player.lives > 3 && player.lives <= 6) {
             player.sprite = cat_girl_6;
@@ -64,6 +65,16 @@ function playerUpdateStatus() {
         // Set player back to beginning coordinates
         player.x = resetX;
         player.y = resetY;
+}
+
+// Game over
+function gameOver() {
+    player.lives -= 1;
+    document.getElementById('game-over').style.display = 'block';
+    document.getElementById('game-over-overlay').style.display = 'block';
+    player.alive = false;
+    player.sprite = "";
+    isGameOver = true;
 }
 
 /*

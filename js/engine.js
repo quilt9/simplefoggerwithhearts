@@ -64,9 +64,17 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+
+        document.getElementById('play-again').addEventListener('click', function() {
+            document.getElementById('game-over').style.display = 'none';
+            document.getElementById('game-over-overlay').style.display = 'none';
+            reset();
+        });
+
         reset();
         lastTime = Date.now();
         main();
+        
     }
 
     /* This function is called by main (our game loop) and itself calls all
