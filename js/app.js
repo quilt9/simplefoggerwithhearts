@@ -44,9 +44,10 @@ function enemySpeed() {
 function playerUpdateStatus() {
         // Check number of lives remaining
         if(player.lives === 0) {
-            alert("3");
             gameOver();
-        } else if(player.lives > 0 && player.lives <= 3) {
+        } else if (player.lives === 20) {
+            youWin();
+        } else if (player.lives > 0 && player.lives <= 3) {
             player.sprite = boy_3;
         } else if (player.lives > 3 && player.lives <= 6) {
             player.sprite = cat_girl_6;
@@ -56,7 +57,7 @@ function playerUpdateStatus() {
             player.sprite = pink_girl_12;
         } else if (player.lives > 12) {
             player.sprite = princess_girl_15;
-        }
+        } 
         // Set player back to beginning coordinates
         player.x = resetX;
         player.y = resetY;
@@ -65,9 +66,7 @@ function playerUpdateStatus() {
 // Update lives and player status after heart collection
 function heartUpdateStatus() {
         // Check number of lives remaining
-        if(player.lives === 0) {
-            gameOver();
-        } else if(player.lives > 0 && player.lives <= 3) {
+        if (player.lives > 0 && player.lives <= 3) {
             player.sprite = boy_3;
         } else if (player.lives > 3 && player.lives <= 6) {
             player.sprite = cat_girl_6;
@@ -87,7 +86,6 @@ function heartUpdateStatus() {
 function gameOver() {
     document.getElementById('game-over').style.display = 'block';
     document.getElementById('game-over-overlay').style.display = 'block';
-    alert("Game Over");
     player.alive = true;
     gameReset();
 }
@@ -103,6 +101,35 @@ function gameReset() {
             //player.sprite = boy_3;
             player.alive = true;
             player.lives = 3;
+            heart.x = gameCol * getRandomInt(0, 5);
+            heart.y = gameRow * getRandomInt(0,3)+65;
+        }
+    });
+
+}
+
+// You win
+function youWin() {
+    document.getElementById('you-win').style.display = 'block';
+    document.getElementById('game-over-overlay').style.display = 'block';
+    //player.x = -9999;
+    player.alive = true;
+    playAgain();
+}
+
+// Game Reset
+function playAgain() {
+    document.getElementById('you-win').addEventListener('click', function() {
+        document.getElementById('you-win').style.display = 'none';
+        document.getElementById('game-over-overlay').style.display = 'none';
+        if (player.alive ===  true) {
+            player.x = resetX;
+            player.y = resetY;
+            player.sprite = boy_3;
+            player.alive = true;
+            player.lives = 3;
+            heart.x = gameCol * getRandomInt(0, 5);
+            heart.y = gameRow * getRandomInt(0,3)+65;
         }
     });
 
@@ -197,16 +224,19 @@ Player.prototype.update = function(x,y) {
     }
 
     // Checks to see if player is alive and reset position
-    if(this.alive === false) {
-        alert("2"); 
+    if(this.alive === false && this.lives === 0) {
+        // Stop game. Lives is 0.
         this.x = -9999;
-        //this.y = -9999;
-        //this.alive = true;
         this.lives = 0;
+        heart.x = -9999;
         gameOver();        
+    } else if (this.alive === false && this.lives === 20) {
+        // Stop game. Lives is 20.
+        this.x = -99999;
+        this.lives = 20;
+        heart.x = -9999;
+        youWin();
     }
-    
-
 };
 
 Player.prototype.renderStatus = function() {
@@ -214,18 +244,24 @@ Player.prototype.renderStatus = function() {
     ctx.font = "36px Arial";
     ctx.textAlign = 'center';
     // Draw scores on the top left
-    ctx.fillStyle="#282828";
+    ctx.fillStyle="#FF8C00";
     ctx.fillText(this.lives + " LIVES", ctx.canvas.width/2, 35);
     ctx.clearRect(0, 590, 505, 620);
+    ctx.font = "28px Arial";
+    ctx.textAlign = 'center';
+    // Draw scores on the top left
+    ctx.fillStyle="#FF8C00";
+    ctx.fillText("Collect 20 Lives and Win", ctx.canvas.width/2, 625);
+    ctx.clearRect(0, 625, 505, 650);
     ctx.font = "16px Arial";
     ctx.textAlign = 'left';
     // Draw scores on the top left
     ctx.fillStyle="#282828";
-    ctx.fillText("Get a Heart + 1 Live", 0, 625);
+    ctx.fillText("Get a Heart + 1 Live", 0, 660);
     ctx.textAlign = 'center';
-    ctx.fillText("Wet Your Toe + 1 Live", gameWidth/2, 625);
+    ctx.fillText("Wet Your Toe + 1 Live", gameWidth/2, 660);
     ctx.textAlign = 'right';
-    ctx.fillText("Get Bugged - 1 Live", gameWidth, 625);
+    ctx.fillText("Get Bugged - 1 Live", gameWidth, 660);
 
 };
 
@@ -241,9 +277,6 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
             // Player loses
             player.lives -= 1;
             if (player.lives === 0) {
-                //player.sprite = "";
-                //heart.sprite = "";
-                //allEnemies = [];
                 player.alive = false;
             } else {
                 playerUpdateStatus();
@@ -256,15 +289,19 @@ Player.prototype.checkCollisions = function(allEnemies,heart) {
         player.x + 37 > heart.x &&
         player.y < heart.y + 25 &&
         player.y + 30 > heart.y) {
-
             // Add 1 live
             player.lives += 1;
             // Reset heart
             heart.taken = true;
             heart.update();
-            // Reset player
             // Update player sprite if needed, based on lives remaining
-            heartUpdateStatus();
+            // Check if there are 20 lives
+            if (player.lives === 20) {
+                // Stop game with 20 lives
+                player.alive = false;
+            } else {
+                heartUpdateStatus();
+            }
     }
 };
 
