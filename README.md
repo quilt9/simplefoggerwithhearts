@@ -7,7 +7,7 @@ Simple Fogger Game with Hearts
 ##### 2) Run across to the other side without bumping into any bugs.
 ##### 3) Collect hearts. 
 ##### 4) Get 20 lives and win!
-#
+
 ---
 #### How to Score: 
 ##### 1) Lose 1 live: Get bugged.
