@@ -1,6 +1,6 @@
-Simple Fogger Game with Hearts
-===============================
+# Simple Fogger Game with Hearts
 #### Be Brave! Collect Hearts. Cross over to the other side.
+#### [Click to Play](https://quilt9.github.io/simplefoggerwithhearts/index.html)
 ---
 #### How to Win:
 ##### 1) Stay away from bugs.
