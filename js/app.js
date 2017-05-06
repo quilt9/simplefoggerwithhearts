@@ -42,56 +42,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// Game over
-function gameOver() {
-  document.getElementById('game-over').style.display = 'block';
-  document.getElementById('game-over-overlay').style.display = 'block';
-  player.alive = true;
-  gameReset();
-}
-
-// Game Reset - Game Over
-function gameReset() {
-  document.getElementById('play-again').addEventListener('click', function () {
-    document.getElementById('game-over').style.display = 'none';
-    document.getElementById('game-over-overlay').style.display = 'none';
-    if (player.alive === true) {
-      player.x = RESET_X;
-      player.y = RESET_Y;
-      player.alive = true;
-      player.lives = 3;
-      heart.x = GAME_COL * getRandomInt(0, 5);
-      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
-    }
-  });
-}
-
-// You win 
-function youWin() {
-  document.getElementById('you-win').style.display = 'block';
-  document.getElementById('game-over-overlay').style.display = 'block';
-  player.alive = true;
-  playAgain();
-}
-
-// Game Reset - You Win
-function playAgain() {
-  document.getElementById('you-win').addEventListener('click', function () {
-    document.getElementById('you-win').style.display = 'none';
-    document.getElementById('game-over-overlay').style.display = 'none';
-    if (player.alive === true) {
-      player.x = RESET_X;
-      player.y = RESET_Y;
-      player.sprite = BOY_3;
-      player.alive = true;
-      player.lives = 3;
-      heart.x = GAME_COL * getRandomInt(0, 5);
-      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
-    }
-  });
-}
-
-
 /* Create Parent/Super class - Entity
 ============================================================================
 */ 
@@ -172,13 +122,62 @@ Player.prototype.handleInput = function (keyCode) {
   }
 };
 
+// Stop game when lives reaches 0. 
+Player.prototype.lossgame = function() {
+  document.getElementById('game-over').style.display = 'block';
+  document.getElementById('game-over-overlay').style.display = 'block';
+  player.alive = true;
+  player.playagain();
+};
+
+// Stop game when lives reaches 20.
+Player.prototype.wingame = function() {
+  document.getElementById('you-win').style.display = 'block';
+  document.getElementById('game-over-overlay').style.display = 'block';
+  player.alive = true;
+  player.youwin();
+};
+
+// Reset heart and player after display none both overlay and message
+Player.prototype.playagain = function() {
+  document.getElementById('play-again').addEventListener('click', function () {
+    document.getElementById('game-over').style.display = 'none';
+    document.getElementById('game-over-overlay').style.display = 'none';
+    if (player.alive === true) {
+      player.x = RESET_X;
+      player.y = RESET_Y;
+      player.alive = true;
+      player.lives = 3;
+      heart.x = GAME_COL * getRandomInt(0, 5);
+      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
+    }
+  });
+};
+
+// Reset heart and player after display none both overlay and message
+Player.prototype.youwin = function() {
+  document.getElementById('you-win').addEventListener('click', function () {
+    document.getElementById('you-win').style.display = 'none';
+    document.getElementById('game-over-overlay').style.display = 'none';
+    if (player.alive === true) {
+      player.x = RESET_X;
+      player.y = RESET_Y;
+      player.sprite = BOY_3;
+      player.alive = true;
+      player.lives = 3;
+      heart.x = GAME_COL * getRandomInt(0, 5);
+      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
+    }
+  });
+};
+
 // Update lives and player sprite after enemy collision and getting to the water
 Player.prototype.playerUpdateStatus = function() {
   // Check number of lives remaining
   if (this.lives === 0) {
-    gameOver();
+    this.lossgame();
   } else if (this.lives === 20) {
-    youWin();
+    this.wingame();
   } else if (this.lives > 0 && this.lives <= 3) {
     this.sprite = BOY_3;
   } else if (this.lives > 3 && this.lives <= 6) {
@@ -198,16 +197,16 @@ Player.prototype.playerUpdateStatus = function() {
 // Update lives and player status after heart collection
 Player.prototype.heartUpdateStatus = function() {
   // Check number of lives remaining
-  if (player.lives > 0 && player.lives <= 3) {
-    player.sprite = BOY_3;
-  } else if (player.lives > 3 && player.lives <= 6) {
-    player.sprite = CAT_GIRL_6;
-  } else if (player.lives > 6 && player.lives <= 9) {
-    player.sprite = HORN_GIRL_9;
-  } else if (player.lives > 9 && player.lives <= 12) {
-    player.sprite = PINK_GIRL_12;
-  } else if (player.lives > 12) {
-    player.sprite = PRINCESS_GIRL_15;
+  if (this.lives > 0 && this.lives <= 3) {
+    this.sprite = BOY_3;
+  } else if (this.lives > 3 && this.lives <= 6) {
+    this.sprite = CAT_GIRL_6;
+  } else if (this.lives > 6 && this.lives <= 9) {
+    this.sprite = HORN_GIRL_9;
+  } else if (this.lives > 9 && this.lives <= 12) {
+    this.sprite = PINK_GIRL_12;
+  } else if (this.lives > 12) {
+    this.sprite = PRINCESS_GIRL_15;
   }
 };
 
@@ -228,16 +227,15 @@ Player.prototype.update = function (x, y) {
     this.x = -9999;
     this.lives = 0;
     heart.x = -9999;
-    gameOver();
+    this.lossgame();
   } else if (this.alive === false && this.lives === 20) {
     // Stop game. Lives is 20.
     this.x = -99999;
     this.lives = 20;
     heart.x = -9999;
-    youWin();
+    this.wingame();
   }
 };
-
 
 /* Create Heart prototype – Capture to gain lives
 ============================================================================
