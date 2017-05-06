@@ -42,10 +42,10 @@ var PINK_GIRL_12 = 'images/char-pink-girl.png';
 var PRINCESS_GIRL_15 = 'images/char-princess-girl.png';
 
 // subClass will inherit from superClass
-inherit = function(subClass,superClass) {
+var inherit = function(subClass,superClass) {
    subClass.prototype = Object.create(superClass.prototype); // delegate to prototype
    subClass.prototype.constructor = subClass; // set constructor on prototype
-}
+};
 
 // Returns a random integer between min (included) and max (excluded)
 function getRandomInt(min, max) {
