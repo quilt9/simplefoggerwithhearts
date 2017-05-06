@@ -124,7 +124,7 @@ Player.prototype.handleInput = function (keyCode) {
 
 // Stop game when lives reaches 0. 
 Player.prototype.lossgame = function() {
-  document.getElementById('game-over').style.display = 'block';
+  document.getElementsByClassName('game-over')[0].style.display = 'block';
   document.getElementById('game-over-overlay').style.display = 'block';
   player.alive = true;
   player.playagain();
@@ -132,7 +132,7 @@ Player.prototype.lossgame = function() {
 
 // Stop game when lives reaches 20.
 Player.prototype.wingame = function() {
-  document.getElementById('you-win').style.display = 'block';
+  document.getElementsByClassName('you-win')[0].style.display = 'block';
   document.getElementById('game-over-overlay').style.display = 'block';
   player.alive = true;
   player.youwin();
@@ -140,8 +140,8 @@ Player.prototype.wingame = function() {
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.playagain = function() {
-  document.getElementById('play-again').addEventListener('click', function () {
-    document.getElementById('game-over').style.display = 'none';
+  document.getElementsByClassName('loss')[0].addEventListener('click', function () {
+    document.getElementsByClassName('game-over')[0].style.display = 'none';
     document.getElementById('game-over-overlay').style.display = 'none';
     if (player.alive === true) {
       player.x = RESET_X;
@@ -156,8 +156,8 @@ Player.prototype.playagain = function() {
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.youwin = function() {
-  document.getElementById('you-win').addEventListener('click', function () {
-    document.getElementById('you-win').style.display = 'none';
+  document.getElementsByClassName('play-again')[0].addEventListener('click', function () {
+    document.getElementsByClassName('you-win')[0].style.display = 'none';
     document.getElementById('game-over-overlay').style.display = 'none';
     if (player.alive === true) {
       player.x = RESET_X;

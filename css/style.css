@@ -9,7 +9,7 @@ body {
   opacity: .5;
 }
 
-#you-win, #game-over, #game-over-overlay {
+.you-win, .game-over, #game-over-overlay {
   margin: auto;
   position: absolute;
   top: 0;
@@ -20,23 +20,23 @@ body {
   display: none;
 }
 
-#you-win, #game-over {
+.you-win, .game-over {
   height: 200px;
   text-align: center;
   color: white;
 }
 
-#game-over h1 {
+.game-over h1 {
   font-size: 3em;
   font-family: sans-serif;
 }
 
-#you-win h1 {
+.you-win h1 {
   font-size: 1.5em;
   font-family: sans-serif;
 }
 
-#game-over button {
+.game-over button {
   -moz-box-shadow: inset 0px 1px 0px 0px #d9fbbe;
   -webkit-box-shadow: inset 0px 1px 0px 0px #d9fbbe;
   box-shadow: inset 0px 1px 0px 0px #d9fbbe;
@@ -63,7 +63,7 @@ body {
   text-shadow: 0px 1px 0px #86ae47;
 }
 
-#game-over button:hover {
+.game-over button:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #a5cc52), color-stop(1, #b8e356));
   background: -moz-linear-gradient(top, #a5cc52 5%, #b8e356 100%);
   background: -webkit-linear-gradient(top, #a5cc52 5%, #b8e356 100%);
@@ -74,12 +74,12 @@ body {
   background-color: #a5cc52;
 }
 
-#game-over button:active {
+.game-over button:active {
   position: relative;
   top: 1px;
 }
 
-#you-win button {
+.you-win button {
   -moz-box-shadow: inset 0px 1px 0px 0px #f7c5c0;
   -webkit-box-shadow: inset 0px 1px 0px 0px #f7c5c0;
   box-shadow: inset 0px 1px 0px 0px #f7c5c0;
@@ -106,7 +106,7 @@ body {
   text-shadow: 0px 1px 0px #b23e35;
 }
 
-#you-win button:hover {
+.you-win button:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e4685d), color-stop(1, #fc8d83));
   background: -moz-linear-gradient(top, #e4685d 5%, #fc8d83 100%);
   background: -webkit-linear-gradient(top, #e4685d 5%, #fc8d83 100%);
@@ -117,7 +117,7 @@ body {
   background-color: #e4685d;
 }
 
-#you-win button:active {
+.you-win button:active {
   position: relative;
   top: 1px;
 }
