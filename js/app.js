@@ -136,14 +136,20 @@ inherit(Player,Entity);
 
 // Control player movement
 Player.prototype.handleInput = function (keyCode) {
-  if (keyCode === "left" && this.x > 0 + CHAR_WIDTH) {
-    this.x -= GAME_COL;
-  } else if (keyCode === "up" && this.y > GAME_TOP_MARGIN) {
-    this.y -= GAME_ROW;
-  } else if (keyCode === "right" && this.x < GAME_WIDTH - GAME_COL) {
-    this.x += GAME_COL;
-  } else if (keyCode === "down" && this.y < GAME_HEIGHT - GAME_ROW) {
-    this.y += GAME_ROW;
+  var foo = keyCode;
+  switch(true) {
+    case (foo === "left" && this.x > 0 + CHAR_WIDTH) :
+      this.x -= GAME_COL;
+      break;
+    case (foo === "up" && this.y > GAME_TOP_MARGIN) :
+      this.y -= GAME_ROW;
+      break;
+    case (foo === "right" && this.x < GAME_WIDTH - GAME_COL) :
+      this.x += GAME_COL;
+      break;
+    case (foo === "down" && this.y < GAME_HEIGHT - GAME_ROW) :
+      this.y += GAME_ROW;
+      break;
   }
 };
 
