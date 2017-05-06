@@ -19,6 +19,12 @@ var GAME_WIDTH = GAME_COL * 5; /* col width multiply number of columns - 505 */
 var GAME_HEIGHT = GAME_ROW * 6; /* col height multiply number of rows - 498 */
 var CHAR_WIDTH = 52; /* player width */
 
+// Game state text display html elements
+var GAME_OVERLAY = document.getElementById('game-over-overlay');
+var LOSS_GAME = document.getElementsByClassName('game-over')[0];
+var WIN_GAME = document.getElementsByClassName('you-win')[0];
+
+
 // Speed in pixels per second
 var SPEED_MIN = 200;
 var SPEED_MAX = 700;
@@ -124,25 +130,25 @@ Player.prototype.handleInput = function (keyCode) {
 
 // Stop game when lives reaches 0. 
 Player.prototype.lossgame = function() {
-  document.getElementsByClassName('game-over')[0].style.display = 'block';
-  document.getElementById('game-over-overlay').style.display = 'block';
-  player.alive = true;
-  player.playagain();
+  LOSS_GAME.style.display = 'block';
+  GAME_OVERLAY.style.display = 'block';
+  this.alive = true;
+  this.playagain();
 };
 
 // Stop game when lives reaches 20.
 Player.prototype.wingame = function() {
-  document.getElementsByClassName('you-win')[0].style.display = 'block';
-  document.getElementById('game-over-overlay').style.display = 'block';
-  player.alive = true;
-  player.youwin();
+  WIN_GAME.style.display = 'block';
+  GAME_OVERLAY.style.display = 'block';
+  this.alive = true;
+  this.youwin();
 };
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.playagain = function() {
   document.getElementsByClassName('loss')[0].addEventListener('click', function () {
-    document.getElementsByClassName('game-over')[0].style.display = 'none';
-    document.getElementById('game-over-overlay').style.display = 'none';
+    LOSS_GAME.style.display = 'none';
+    GAME_OVERLAY.style.display = 'none';
     if (player.alive === true) {
       player.x = RESET_X;
       player.y = RESET_Y;
