@@ -20,10 +20,11 @@ var GAME_HEIGHT = GAME_ROW * 6; /* col height multiply number of rows - 498 */
 var CHAR_WIDTH = 52; /* player width */
 
 // Game state text display html elements
-var GAME_OVERLAY = document.getElementById('game-over-overlay');
-var LOSS_GAME = document.getElementsByClassName('game-over')[0];
-var WIN_GAME = document.getElementsByClassName('you-win')[0];
-
+var GAME_OVERLAY = document.getElementById("game-over-overlay");
+var LOSS_GAME = document.getElementsByClassName("game-over")[0];
+var WIN_GAME = document.getElementsByClassName("you-win")[0];
+var LOSS_BUTTON = document.getElementsByClassName("loss")[0];
+var WIN_BUTTON = document.getElementsByClassName("play-again")[0];
 
 // Speed in pixels per second
 var SPEED_MIN = 200;
@@ -46,6 +47,18 @@ function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
+}
+
+// Start game to play again. Not a reset.
+function playAgain() {
+  if (player.alive === true) {
+      player.x = RESET_X;
+      player.y = RESET_Y;
+      player.sprite = BOY_3;
+      player.lives = 3;
+      heart.x = GAME_COL * getRandomInt(0, 5);
+      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
+    }
 }
 
 /* Create Parent/Super class - Entity
@@ -146,34 +159,19 @@ Player.prototype.wingame = function() {
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.playagain = function() {
-  document.getElementsByClassName('loss')[0].addEventListener('click', function () {
+    LOSS_BUTTON.addEventListener('click', function () {
     LOSS_GAME.style.display = 'none';
     GAME_OVERLAY.style.display = 'none';
-    if (player.alive === true) {
-      player.x = RESET_X;
-      player.y = RESET_Y;
-      player.alive = true;
-      player.lives = 3;
-      heart.x = GAME_COL * getRandomInt(0, 5);
-      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
-    }
+    playAgain();
   });
 };
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.youwin = function() {
-  document.getElementsByClassName('play-again')[0].addEventListener('click', function () {
-    document.getElementsByClassName('you-win')[0].style.display = 'none';
-    document.getElementById('game-over-overlay').style.display = 'none';
-    if (player.alive === true) {
-      player.x = RESET_X;
-      player.y = RESET_Y;
-      player.sprite = BOY_3;
-      player.alive = true;
-      player.lives = 3;
-      heart.x = GAME_COL * getRandomInt(0, 5);
-      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
-    }
+  WIN_BUTTON.addEventListener('click', function () {
+    WIN_GAME.style.display = 'none';
+    GAME_OVERLAY.style.display = 'none';
+    playAgain();
   });
 };
 
