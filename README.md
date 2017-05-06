@@ -15,6 +15,10 @@
 **Game ends when lives reaches zero.**
 
 ---
+#### To clone this repo:
+### $ git clone https://github.com/quilt9/simplefoggerwithhearts.git
+
+---
 **I did research using information found on the following sites to finish the Arcade Game:**
 * <https://medium.com/@alibhatti99/javascript-pseudoclassical-subclasses-a85c3aa6a055>
 * <https://www.w3schools.com/js/js_object_prototypes.asp>
