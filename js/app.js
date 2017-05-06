@@ -42,11 +42,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// Return a random speed
-function enemySpeed() {
-  return (SPEED_MIN + Math.floor(Math.random() * SPEED_MAX));
-}
-
 // Update lives and player sprite after enemy collision and getting to the water
 function playerUpdateStatus() {
   // Check number of lives remaining
@@ -163,7 +158,7 @@ var Enemy = function (x, y) {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
   Entity.call(this, x, y, 'images/enemy-bug.png');
-  this.speed = enemySpeed();
+  this.speed = SPEED_MIN + Math.floor(Math.random() * SPEED_MAX);
 };
 // Inherit all of the properties and methods of Entity
 Enemy.prototype = Object.create(Entity.prototype);
@@ -175,18 +170,17 @@ Enemy.prototype.update = function (dt) {
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for
   // all computers.
-
   /* HS */
   // Determine whether the enemy is inside or outside of the canvas
   if (this.x > GAME_WIDTH + GAME_COL) {
     // Reset the x coordinate to start again
     this.x = 0 - GAME_COL;
     this.y = GAME_ROW * getRandomInt(0, 3) + 65;
-    // Create a random speed 
-    this.speed = enemySpeed();
   }
   this.x += this.speed * dt;
 };
+
+
 
 
 /* Create Player prototype – Player the user controls
