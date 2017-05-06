@@ -190,20 +190,28 @@ Player.prototype.youwin = function() {
 // Update lives and player sprite after enemy collision and getting to the water
 Player.prototype.playerUpdateStatus = function() {
   // Check number of lives remaining
-  if (this.lives === 0) {
-    this.lossgame();
-  } else if (this.lives === 20) {
-    this.wingame();
-  } else if (this.lives > 0 && this.lives <= 3) {
-    this.sprite = BOY_3;
-  } else if (this.lives > 3 && this.lives <= 6) {
-    this.sprite = CAT_GIRL_6;
-  } else if (this.lives > 6 && this.lives <= 9) {
-    this.sprite = HORN_GIRL_9;
-  } else if (this.lives > 9 && this.lives <= 12) {
-    this.sprite = PINK_GIRL_12;
-  } else if (this.lives > 12) {
-    this.sprite = PRINCESS_GIRL_15;
+  switch(true) {
+    case (this.lives === 0) :
+      this.lossgame();
+      break;
+    case (this.lives === 20) :
+      this.wingame();
+      break;
+    case (this.lives > 0 && this.lives <= 3) :
+      this.sprite = BOY_3;
+      break;
+    case (this.lives > 3 && this.lives <= 6) :
+      this.sprite = CAT_GIRL_6;
+      break;
+    case (this.lives > 6 && this.lives <= 9) :
+      this.sprite = HORN_GIRL_9;
+      break;
+    case (this.lives > 9 && this.lives <= 12) :
+      this.sprite = PINK_GIRL_12;
+      break;
+    case (this.lives > 12) :
+      this.sprite = PRINCESS_GIRL_15;
+      break;
   }
   // Set this back to beginning coordinates
   this.x = RESET_X;
@@ -213,17 +221,23 @@ Player.prototype.playerUpdateStatus = function() {
 // Update lives and player status after heart collection
 Player.prototype.heartUpdateStatus = function() {
   // Check number of lives remaining
-  if (this.lives > 0 && this.lives <= 3) {
-    this.sprite = BOY_3;
-  } else if (this.lives > 3 && this.lives <= 6) {
-    this.sprite = CAT_GIRL_6;
-  } else if (this.lives > 6 && this.lives <= 9) {
-    this.sprite = HORN_GIRL_9;
-  } else if (this.lives > 9 && this.lives <= 12) {
-    this.sprite = PINK_GIRL_12;
-  } else if (this.lives > 12) {
-    this.sprite = PRINCESS_GIRL_15;
-  }
+  switch(true) {
+    case (this.lives > 0 && this.lives <= 3) :
+      this.sprite = BOY_3;
+      break;
+    case (this.lives > 3 && this.lives <= 6) :
+      this.sprite = CAT_GIRL_6;
+      break;
+    case (this.lives > 6 && this.lives <= 9) :
+      this.sprite = HORN_GIRL_9;
+      break;
+    case (this.lives > 9 && this.lives <= 12) :
+      this.sprite = PINK_GIRL_12;
+      break;
+    case (this.lives > 12) :
+      this.sprite = PRINCESS_GIRL_15;
+      break;
+    }
 };
 
 // Check player's state and update lives and player sprite
@@ -307,7 +321,7 @@ Player.prototype.renderStatus = function () {
 ============================================================================
 */
 
-Player.prototype.checkCollisions = function (allEnemies, heart) {
+Player.prototype.checkCollisions = function (allEnemies) {
   // Check collisions with enemies
   allEnemies.forEach(function (enemy) {
     if (player.x < enemy.x + 60 &&
