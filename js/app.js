@@ -42,45 +42,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// Update lives and player sprite after enemy collision and getting to the water
-function playerUpdateStatus() {
-  // Check number of lives remaining
-  if (player.lives === 0) {
-    gameOver();
-  } else if (player.lives === 20) {
-    youWin();
-  } else if (player.lives > 0 && player.lives <= 3) {
-    player.sprite = BOY_3;
-  } else if (player.lives > 3 && player.lives <= 6) {
-    player.sprite = CAT_GIRL_6;
-  } else if (player.lives > 6 && player.lives <= 9) {
-    player.sprite = HORN_GIRL_9;
-  } else if (player.lives > 9 && player.lives <= 12) {
-    player.sprite = PINK_GIRL_12;
-  } else if (player.lives > 12) {
-    player.sprite = PRINCESS_GIRL_15;
-  }
-  // Set player back to beginning coordinates
-  player.x = RESET_X;
-  player.y = RESET_Y;
-}
-
-// Update lives and player status after heart collection
-function heartUpdateStatus() {
-  // Check number of lives remaining
-  if (player.lives > 0 && player.lives <= 3) {
-    player.sprite = BOY_3;
-  } else if (player.lives > 3 && player.lives <= 6) {
-    player.sprite = CAT_GIRL_6;
-  } else if (player.lives > 6 && player.lives <= 9) {
-    player.sprite = HORN_GIRL_9;
-  } else if (player.lives > 9 && player.lives <= 12) {
-    player.sprite = PINK_GIRL_12;
-  } else if (player.lives > 12) {
-    player.sprite = PRINCESS_GIRL_15;
-  }
-}
-
 // Game over
 function gameOver() {
   document.getElementById('game-over').style.display = 'block';
@@ -103,7 +64,6 @@ function gameReset() {
       heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
     }
   });
-
 }
 
 // You win 
@@ -129,7 +89,6 @@ function playAgain() {
       heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
     }
   });
-
 }
 
 
@@ -181,8 +140,6 @@ Enemy.prototype.update = function (dt) {
 };
 
 
-
-
 /* Create Player prototype – Player the user controls
 ============================================================================
 */
@@ -214,8 +171,47 @@ Player.prototype.handleInput = function (keyCode) {
     this.y += GAME_ROW;
   }
 };
- 
-// Check layer's state and update lives and player sprite
+
+// Update lives and player sprite after enemy collision and getting to the water
+Player.prototype.playerUpdateStatus = function() {
+  // Check number of lives remaining
+  if (this.lives === 0) {
+    gameOver();
+  } else if (this.lives === 20) {
+    youWin();
+  } else if (this.lives > 0 && this.lives <= 3) {
+    this.sprite = BOY_3;
+  } else if (this.lives > 3 && this.lives <= 6) {
+    this.sprite = CAT_GIRL_6;
+  } else if (this.lives > 6 && this.lives <= 9) {
+    this.sprite = HORN_GIRL_9;
+  } else if (this.lives > 9 && this.lives <= 12) {
+    this.sprite = PINK_GIRL_12;
+  } else if (this.lives > 12) {
+    this.sprite = PRINCESS_GIRL_15;
+  }
+  // Set this back to beginning coordinates
+  this.x = RESET_X;
+  this.y = RESET_Y;
+};
+
+// Update lives and player status after heart collection
+Player.prototype.heartUpdateStatus = function() {
+  // Check number of lives remaining
+  if (player.lives > 0 && player.lives <= 3) {
+    player.sprite = BOY_3;
+  } else if (player.lives > 3 && player.lives <= 6) {
+    player.sprite = CAT_GIRL_6;
+  } else if (player.lives > 6 && player.lives <= 9) {
+    player.sprite = HORN_GIRL_9;
+  } else if (player.lives > 9 && player.lives <= 12) {
+    player.sprite = PINK_GIRL_12;
+  } else if (player.lives > 12) {
+    player.sprite = PRINCESS_GIRL_15;
+  }
+};
+
+// Check player's state and update lives and player sprite
 Player.prototype.update = function (x, y) {
   // Check to see if player reaches the water
   if (this.y <= 10) {
@@ -223,7 +219,7 @@ Player.prototype.update = function (x, y) {
     this.lives += 1;
     // Reset player
     // Update player sprite if needed, based on lives remaining
-    playerUpdateStatus();
+    this.playerUpdateStatus();
   }
 
   // Checks to see if player is alive and reset position
@@ -309,28 +305,28 @@ Player.prototype.checkCollisions = function (allEnemies, heart) {
       if (player.lives === 0) {
         player.alive = false;
       } else {
-        playerUpdateStatus();
+        player.playerUpdateStatus();
       }
     }
   });
 
   // Check collisions with heart
-  if (player.x < heart.x + 60 &&
-    player.x + 37 > heart.x &&
-    player.y < heart.y + 25 &&
-    player.y + 30 > heart.y) {
+  if (this.x < heart.x + 60 &&
+    this.x + 37 > heart.x &&
+    this.y < heart.y + 25 &&
+    this.y + 30 > heart.y) {
     // Add 1 live
-    player.lives += 1;
+    this.lives += 1;
     // Reset heart
     heart.taken = true;
     heart.update();
     // Update player sprite if needed, based on lives remaining
     // Check if there are 20 lives
-    if (player.lives === 20) {
+    if (this.lives === 20) {
       // Stop game with 20 lives
-      player.alive = false;
+      this.alive = false;
     } else {
-      heartUpdateStatus();
+      this.heartUpdateStatus();
     }
   }
 };
