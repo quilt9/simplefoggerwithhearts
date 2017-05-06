@@ -16,7 +16,7 @@
 
 ---
 #### To clone this repo:
-### $ git clone https://github.com/quilt9/simplefoggerwithhearts.git
+```$ git clone https://github.com/quilt9/simplefoggerwithhearts.git```
 
 ---
 **I did research using information found on the following sites to finish the Arcade Game:**
