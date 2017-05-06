@@ -41,6 +41,12 @@ var HORN_GIRL_9 = 'images/char-horn-girl.png';
 var PINK_GIRL_12 = 'images/char-pink-girl.png';
 var PRINCESS_GIRL_15 = 'images/char-princess-girl.png';
 
+// subClass will inherit from superClass
+inherit = function(subClass,superClass) {
+   subClass.prototype = Object.create(superClass.prototype); // delegate to prototype
+   subClass.prototype.constructor = subClass; // set constructor on prototype
+}
+
 // Returns a random integer between min (included) and max (excluded)
 function getRandomInt(min, max) {
   "use strict";
@@ -88,10 +94,10 @@ var Enemy = function (x, y) {
   Entity.call(this, x, y, 'images/enemy-bug.png');
   this.speed = SPEED_MIN + Math.floor(Math.random() * SPEED_MAX);
 };
-// Inherit all of the properties and methods of Entity
-Enemy.prototype = Object.create(Entity.prototype);
-// Set the Enemey prototype constructor
-Enemy.prototype.constructor = Enemy;
+
+// Call helper function to create Enemy from superClass 
+inherit(Enemy,Entity);
+
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
@@ -125,8 +131,8 @@ var Player = function (x, y) {
   this.lives = 3;
 };
 
-Player.prototype = Object.create(Entity.prototype);
-Player.prototype.constructor = Player;
+// Call helper function to create Player from superClass 
+inherit(Player,Entity);
 
 // Control player movement
 Player.prototype.handleInput = function (keyCode) {
