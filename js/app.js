@@ -55,18 +55,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-// Start game to play again. Not a reset.
-function playAgain() {
-  if (player.alive === true) {
-      player.x = RESET_X;
-      player.y = RESET_Y;
-      player.sprite = BOY_3;
-      player.lives = 3;
-      heart.x = GAME_COL * getRandomInt(0, 5);
-      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
-    }
-}
-
 /* Create Parent/Super class - Entity
 ============================================================================
 */ 
@@ -171,19 +159,35 @@ Player.prototype.wingame = function() {
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.playagain = function() {
+    var self = this;
     LOSS_BUTTON.addEventListener('click', function () {
     LOSS_GAME.style.display = 'none';
     GAME_OVERLAY.style.display = 'none';
-    playAgain();
+    // Start game to play again. Not a reset.
+    if (self.alive === true) {
+      self.x = RESET_X;
+      self.y = RESET_Y;
+      self.lives = 3;
+      heart.x = GAME_COL * getRandomInt(0, 5);
+      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
+    }
   });
 };
 
 // Reset heart and player after display none both overlay and message
 Player.prototype.youwin = function() {
+  var self = this;
   WIN_BUTTON.addEventListener('click', function () {
     WIN_GAME.style.display = 'none';
     GAME_OVERLAY.style.display = 'none';
-    playAgain();
+    if (self.alive === true) {
+      self.x = RESET_X;
+      self.y = RESET_Y;
+      self.sprite = BOY_3;
+      self.lives = 3;
+      heart.x = GAME_COL * getRandomInt(0, 5);
+      heart.y = GAME_ROW * getRandomInt(0, 3) + 65;
+    }
   });
 };
 
@@ -322,18 +326,19 @@ Player.prototype.renderStatus = function () {
 */
 
 Player.prototype.checkCollisions = function (allEnemies) {
+  var self = this;
   // Check collisions with enemies
   allEnemies.forEach(function (enemy) {
-    if (player.x < enemy.x + 60 &&
-      player.x + 37 > enemy.x &&
-      player.y < enemy.y + 25 &&
-      player.y + 30 > enemy.y) {
-      // Player loses
-      player.lives -= 1;
-      if (player.lives === 0) {
-        player.alive = false;
+    if (self.x < enemy.x + 60 &&
+      self.x + 37 > enemy.x &&
+      self.y < enemy.y + 25 &&
+      self.y + 30 > enemy.y) {
+      // self loses
+      self.lives -= 1;
+      if (self.lives === 0) {
+        self.alive = false;
       } else {
-        player.playerUpdateStatus();
+        self.playerUpdateStatus();
       }
     }
   });
