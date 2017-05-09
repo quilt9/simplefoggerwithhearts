@@ -7,9 +7,6 @@ body {
   height: 100%;
   background-color: black;
   opacity: .5;
-}
-
-.you-win, .game-over, #game-over-overlay {
   margin: auto;
   position: absolute;
   top: 0;
@@ -24,6 +21,25 @@ body {
   height: 200px;
   text-align: center;
   color: white;
+  margin: auto;
+  position: absolute;
+  top: 200px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: none;
+}
+
+.game-over-image, .you-win-image {
+  margin: auto;
+  position: absolute;
+  top: 155px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: none;
 }
 
 .game-over h1 {

@@ -21,6 +21,8 @@ var CHAR_WIDTH = 52; /* player width */
 
 // Game state text display html elements
 var GAME_OVERLAY = document.getElementById("game-over-overlay");
+var GAME_OVER_IMAGE = document.querySelector(".game-over-image");
+var YOU_WIN_IMAGE = document.querySelector(".you-win-image");
 var LOSS_GAME = document.getElementsByClassName("game-over")[0];
 var WIN_GAME = document.getElementsByClassName("you-win")[0];
 var LOSS_BUTTON = document.getElementsByClassName("loss")[0];
@@ -54,6 +56,7 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
+
 
 /* Create Parent/Super class - Entity
 ============================================================================
@@ -144,6 +147,7 @@ Player.prototype.handleInput = function (keyCode) {
 // Stop game when lives reaches 0. 
 Player.prototype.lossgame = function() {
   LOSS_GAME.style.display = 'block';
+  GAME_OVER_IMAGE.style.display = "block";
   GAME_OVERLAY.style.display = 'block';
   this.alive = true;
   this.playagain();
@@ -152,6 +156,7 @@ Player.prototype.lossgame = function() {
 // Stop game when lives reaches 20.
 Player.prototype.wingame = function() {
   WIN_GAME.style.display = 'block';
+  YOU_WIN_IMAGE.style.display = "block";
   GAME_OVERLAY.style.display = 'block';
   this.alive = true;
   this.youwin();
@@ -162,6 +167,7 @@ Player.prototype.playagain = function() {
     var self = this;
     LOSS_BUTTON.addEventListener('click', function () {
     LOSS_GAME.style.display = 'none';
+    GAME_OVER_IMAGE.style.display = "none";
     GAME_OVERLAY.style.display = 'none';
     // Start game to play again. Not a reset.
     if (self.alive === true) {
@@ -179,6 +185,7 @@ Player.prototype.youwin = function() {
   var self = this;
   WIN_BUTTON.addEventListener('click', function () {
     WIN_GAME.style.display = 'none';
+    YOU_WIN_IMAGE.style.display ="none";
     GAME_OVERLAY.style.display = 'none';
     if (self.alive === true) {
       self.x = RESET_X;
